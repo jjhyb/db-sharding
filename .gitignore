@@ -1,0 +1,3 @@
+# Project exclude paths
+/sharding-jdbc-case/target/
+/sharding-jdbc-simple/target/

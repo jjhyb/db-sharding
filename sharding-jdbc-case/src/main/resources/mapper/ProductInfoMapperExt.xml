@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yibo.shardingcase.mapper.ProductInfoMapperExt">
+  <resultMap id="BaseResultMap" type="com.yibo.shardingcase.domain.entity.ProductInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="product_info_id" jdbcType="BIGINT" property="productInfoId" />
+    <result column="store_info_id" jdbcType="BIGINT" property="storeInfoId" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="spec" jdbcType="VARCHAR" property="spec" />
+    <result column="region_code" jdbcType="VARCHAR" property="regionCode" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
+  </resultMap>
+
+  <insert id="addProductInfo" useGeneratedKeys="true" keyColumn="product_info_id" keyProperty="productInfoId" parameterType="com.yibo.shardingcase.domain.entity.ProductInfo">
+    insert into product_info(store_info_id,product_name,spec,region_code,price)
+    values (#{storeInfoId},#{productName},#{spec},#{regionCode},#{price})
+  </insert>
+
+  <resultMap id="ProductResultMap" type="com.yibo.shardingcase.domain.entity.ProductInfoDTO" extends="BaseResultMap">
+    <result column="descript" jdbcType="LONGVARCHAR" property="descript" />
+    <result column="region_name" jdbcType="VARCHAR" property="regionName" />
+  </resultMap>
+
+  <select id="selectProductList" resultMap="ProductResultMap">
+    select info.product_info_id,info.store_info_id,info.product_name,info.spec,
+    info.region_code,info.price,info.image_url,des.descript,re.region_name
+    from product_info info,product_descript des,region re
+    where info.product_info_id = des.product_info_id
+    and info.region_code = re.region_code order by info.product_info_id desc
+    limit #{pageNum},#{pageSize}
+  </select>
+
+  <select id="selectProductCount" resultType="java.lang.Integer">
+    select count(1) from product_info
+  </select>
+
+  <select id="selectProductGroupList" resultType="java.util.HashMap">
+    select region_code,count(1) num from product_info group by region_code having num > 1 order by region_code
+  </select>
+</mapper>

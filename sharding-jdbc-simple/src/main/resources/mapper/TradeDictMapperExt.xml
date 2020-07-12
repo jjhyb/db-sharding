@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yibo.dbsharding.mapper.TradeDictMapperExt">
+  <resultMap id="BaseResultMap" type="com.yibo.dbsharding.domain.entity.TradeDict">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="dict_id" jdbcType="BIGINT" property="dictId" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
+  </resultMap>
+
+  <insert id="addTradeDict" parameterType="com.yibo.dbsharding.domain.entity.TradeDict">
+    insert into trade_dict(dict_id,type,code,value) values(#{dictId},#{type},#{code},#{value})
+  </insert>
+
+  <delete id="deleteTradeDict">
+    delete from trade_dict where dict_id = #{dictId}
+  </delete>
+</mapper>
